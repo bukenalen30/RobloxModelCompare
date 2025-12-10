@@ -55,17 +55,18 @@ if scaler is None:
     invalid_svm = invalid_knn = True
 
 # ==============================================
-# FITUR (WAJIB SAMA DENGAN SCALER: 7 FITUR)
+# FITUR (7 FITUR SESUAI SCALER)
 # ==============================================
-feature_cols = getattr(scaler, "feature_names_in_", [
-    "Active", "Visits", "Favourites", "Likes", "Dislikes", "like_ratio", "fav_per_visit"
-])
+feature_cols = [
+    "Active", "Visits", "Favourites", "Likes", "Dislikes",
+    "like_ratio", "fav_per_visit"
+]
 
 st.sidebar.write("### Scaler expects:")
 st.sidebar.write(feature_cols)
 
 # ==============================================
-# INPUT USER
+# INPUT USER (5 nilai asli)
 # ==============================================
 active = st.sidebar.number_input("Active", min_value=0)
 visits = st.sidebar.number_input("Visits", min_value=0)
@@ -73,7 +74,7 @@ favourites = st.sidebar.number_input("Favourites", min_value=0)
 likes = st.sidebar.number_input("Likes", min_value=0)
 dislikes = st.sidebar.number_input("Dislikes", min_value=0)
 
-# hitung fitur tambahan (supaya 7 fitur match dengan scaler)
+# 2 fitur tambahan dihitung otomatis
 like_ratio = likes / (dislikes + 1)
 fav_per_visit = favourites / (visits + 1)
 
@@ -85,7 +86,7 @@ if st.sidebar.button("🌸 Prediksi"):
     if invalid_svm or invalid_knn:
         st.error("❌ Tidak dapat melakukan prediksi karena model tidak valid.")
     else:
-        # DataFrame dengan 7 fitur lengkap
+        # DataFrame dengan 7 fitur lengkap sesuai scaler
         x_df = pd.DataFrame([[
             active, visits, favourites, likes, dislikes,
             like_ratio, fav_per_visit
@@ -109,6 +110,7 @@ if st.sidebar.button("🌸 Prediksi"):
 
         with col2:
             st.info(f"**KNN:** {label_map[knn_pred]}")
+
 
 # ==============================================
 # VISUALISASI EVALUASI (JIKA ADA)
