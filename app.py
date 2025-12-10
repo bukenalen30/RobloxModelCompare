@@ -32,7 +32,7 @@ svm_model, knn_model, scaler, evaluation = load_all()
 # ==============================================
 # FEATURE LIST (5 FITUR)
 # ==============================================
-feature_cols = ["Active", "Visits", "Favourites", "Likes", "Dislikes"]
+feature_cols = ["Active", "Visits", "Favourites", "Likes", "Dislikes", "like_ratio", "fav_per_visit"]
 
 # Debug info
 st.sidebar.write("**Scaler expects:**", getattr(scaler, "n_features_in_", "?"))
@@ -53,13 +53,17 @@ favourites = st.sidebar.number_input("Favourites", min_value=0)
 likes = st.sidebar.number_input("Likes", min_value=0)
 dislikes = st.sidebar.number_input("Dislikes", min_value=0)
 
+# fitur turunan
+like_ratio = likes / (likes + dislikes) if (likes + dislikes) > 0 else 0
+fav_per_visit = favourites / visits if visits > 0 else 0("Dislikes", min_value=0)
+
 # ==============================================
 # PREDIKSI (PAKAI DATAFRAME)
 # ==============================================
 if st.sidebar.button("🌸 Prediksi"):
 
     # Buat DataFrame agar fitur dan nama kolom MATCH scaler
-    x_df = pd.DataFrame([[active, visits, favourites, likes, dislikes]], columns=feature_cols)
+    x_df = pd.DataFrame([[active, visits, favourites, likes, dislikes, like_ratio, fav_per_visit]], columns=feature_cols)
 
     st.write("### 🔍 Input DataFrame (untuk pengecekan):")
     st.write(x_df)
