@@ -25,6 +25,12 @@ def load_all():
 
 svm_model, knn_model, scaler, evaluation = load_all()
 
+# Pastikan model bukan numpy array
+if isinstance(svm_model, np.ndarray):
+    st.error("❌ ERROR: svm_model is numpy.ndarray — periksa file svm_model.pkl di Colab.")
+if isinstance(knn_model, np.ndarray):
+    st.error("❌ ERROR: knn_model is numpy.ndarray — periksa file knn_model.pkl di Colab.")()
+
 # ==============================================
 # 7 fitur (Wajib karena scaler expect 7 fitur)
 # ==============================================
