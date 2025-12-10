@@ -55,27 +55,21 @@ if scaler is None:
     invalid_svm = invalid_knn = True
 
 # ==============================================
-# FITUR (7 FITUR SESUAI SCALER)
+# FITUR (5 FITUR SAJA — sesuai scaler fit time)
 # ==============================================
-feature_cols = [
-    "Active", "Visits", "Favourites", "Likes", "Dislikes"
-]
+feature_cols = ["Active", "Visits", "Favourites", "Likes", "Dislikes"]
 
 st.sidebar.write("### Scaler expects:")
 st.sidebar.write(feature_cols)
 
 # ==============================================
-# INPUT USER (5 nilai asli)
+# INPUT USER
 # ==============================================
 active = st.sidebar.number_input("Active", min_value=0)
 visits = st.sidebar.number_input("Visits", min_value=0)
 favourites = st.sidebar.number_input("Favourites", min_value=0)
 likes = st.sidebar.number_input("Likes", min_value=0)
 dislikes = st.sidebar.number_input("Dislikes", min_value=0)
-
-# 2 fitur tambahan dihitung otomatis
-like_ratio = likes / (dislikes + 1)
-fav_per_visit = favourites / (visits + 1)
 
 # ==============================================
 # PREDIKSI
@@ -85,15 +79,16 @@ if st.sidebar.button("🌸 Prediksi"):
     if invalid_svm or invalid_knn:
         st.error("❌ Tidak dapat melakukan prediksi karena model tidak valid.")
     else:
-        # DataFrame dengan 7 fitur lengkap sesuai scaler
+
+        # DataFrame SESUAI DENGAN SCALER (5 FITUR)
         x_df = pd.DataFrame([[
-            active, visits, favourites, likes, dislikes,
-            like_ratio, fav_per_visit
+            active, visits, favourites, likes, dislikes
         ]], columns=feature_cols)
 
         st.write("### 🔍 Input DataFrame:")
         st.write(x_df)
 
+        # TRANSFORM AMAN (TIDAK ADA LAGI FITUR TAMBAHAN)
         x_scaled = scaler.transform(x_df)
 
         svm_pred = svm_model.predict(x_scaled)[0]
