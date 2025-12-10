@@ -58,8 +58,7 @@ if scaler is None:
 # FITUR (7 FITUR SESUAI SCALER)
 # ==============================================
 feature_cols = [
-    "Active", "Visits", "Favourites", "Likes", "Dislikes",
-    "like_ratio", "fav_per_visit"
+    "Active", "Visits", "Favourites", "Likes", "Dislikes"
 ]
 
 st.sidebar.write("### Scaler expects:")
