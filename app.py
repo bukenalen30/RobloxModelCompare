@@ -94,7 +94,7 @@ if st.sidebar.button("🌸 Prediksi"):
         svm_pred = svm_model.predict(x_scaled)[0]
         knn_pred = knn_model.predict(x_scaled)[0]
 
-        label_map = {0: "Rendah", 1: "Sedang", 2: "Tinggi"}
+        label_map = {0: "Low", 1: "Medium", 2: "High"}
 
         st.subheader("🔮 Hasil Prediksi")
         col1, col2 = st.columns(2)
