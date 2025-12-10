@@ -7,17 +7,13 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="Roblox Popularity Classifier 🌸", layout="wide")
 
 # ==============================================
-# PINK BLOSSOM HEADER
-# ==============================================
 st.markdown("""
-    <div style="background-color:#ffe6f0; padding:20px; border-radius:12px; border:2px solid #ffb3d2; margin-bottom:20px;">
-        <h1 style="color:#d14a7c; text-align:center;">🌸 Roblox Game Popularity Classifier 🌸</h1>
-        <p style="color:#5a2a41; text-align:center;">Prediksi tingkat popularitas game Roblox menggunakan model SVM & KNN.</p>
-    </div>
+<div style="background-color:#ffe6f0; padding:20px; border-radius:12px; border:2px solid #ffb3d2; margin-bottom:20px;">
+    <h1 style="color:#d14a7c; text-align:center;">🌸 Roblox Game Popularity Classifier 🌸</h1>
+    <p style="color:#5a2a41; text-align:center;">Prediksi tingkat popularitas game Roblox menggunakan model SVM & KNN.</p>
+</div>
 """, unsafe_allow_html=True)
 
-# ==============================================
-# LOAD MODEL & SCALER
 # ==============================================
 @st.cache_resource
 def load_all():
@@ -30,21 +26,21 @@ def load_all():
 svm_model, knn_model, scaler, evaluation = load_all()
 
 # ==============================================
-# FEATURE LIST (5 FITUR)
+# 7 fitur (Wajib karena scaler expect 7 fitur)
 # ==============================================
-feature_cols = ["Active", "Visits", "Favourites", "Likes", "Dislikes", "like_ratio", "fav_per_visit"]
+feature_cols = [
+    "Active", "Visits", "Favourites", "Likes", "Dislikes",
+    "like_ratio", "fav_per_visit"
+]
 
-# Debug info
-st.sidebar.write("**Scaler expects:**", getattr(scaler, "n_features_in_", "?"))
-st.sidebar.write("**Feature names:**", getattr(scaler, "feature_names_in_", "No names"))
+st.sidebar.write("Scaler expects:", getattr(scaler, "n_features_in_", "?"))
+st.sidebar.write("Feature names:", getattr(scaler, "feature_names_in_", "no names"))
 
-# ==============================================
-# INPUT SIDEBAR
 # ==============================================
 st.sidebar.markdown("""
-    <div style="background-color:#ffe6f0; padding:15px; border-radius:10px; border:2px solid #ffb3d2;">
-        <h3 style="color:#d14a7c; text-align:center;">🌺 Input Data</h3>
-    </div>
+<div style="background-color:#ffe6f0; padding:15px; border-radius:10px; border:2px solid #ffb3d2;">
+    <h3 style="color:#d14a7c; text-align:center;">🌺 Input Data</h3>
+</div>
 """, unsafe_allow_html=True)
 
 active = st.sidebar.number_input("Active", min_value=0)
@@ -55,18 +51,18 @@ dislikes = st.sidebar.number_input("Dislikes", min_value=0)
 
 # fitur turunan
 like_ratio = likes / (likes + dislikes) if (likes + dislikes) > 0 else 0
-fav_per_visit = favourites / visits if visits > 0 else 0("Dislikes", min_value=0)
+fav_per_visit = favourites / visits if visits > 0 else 0
 
-# ==============================================
-# PREDIKSI (PAKAI DATAFRAME)
 # ==============================================
 if st.sidebar.button("🌸 Prediksi"):
 
-    # Buat DataFrame agar fitur dan nama kolom MATCH scaler
-    x_df = pd.DataFrame([[active, visits, favourites, likes, dislikes, like_ratio, fav_per_visit]], columns=feature_cols)
+    x_df = pd.DataFrame([[
+        active, visits, favourites, likes, dislikes,
+        like_ratio, fav_per_visit
+    ]], columns=feature_cols)
 
-    st.write("### 🔍 Input DataFrame (untuk pengecekan):")
-    st.write(x_df)
+    st.write("### 🔍 Input DataFrame:")
+    st.dataframe(x_df)
 
     x_scaled = scaler.transform(x_df)
 
@@ -84,8 +80,6 @@ if st.sidebar.button("🌸 Prediksi"):
     with col2:
         st.info(f"**KNN:** {label_map[knn_pred]}")
 
-# ==============================================
-# VISUALISASI EVALUASI MODEL
 # ==============================================
 st.header("📊 Visualisasi Evaluasi Model")
 
@@ -110,8 +104,6 @@ with colA:
 with colB:
     plot_matrix(knn_matrix, "Confusion Matrix - KNN")
 
-# ==============================================
-# METRIK EVALUASI
 # ==============================================
 st.header("📈 Perbandingan Metrik Evaluasi")
 
